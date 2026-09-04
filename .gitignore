@@ -1,0 +1,17 @@
+# Generated working data
+output/
+*.log
+
+# Local/private source data
+private/
+real-data/
+source-data/
+
+# PowerShell/editor artefacts
+*.tmp
+.vscode/
+.idea/
+
+# OS metadata
+Thumbs.db
+.DS_Store
