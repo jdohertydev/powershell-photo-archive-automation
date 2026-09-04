@@ -31,24 +31,28 @@ if (-not (Test-Path -LiteralPath $SourceRoot -PathType Container)) {
 $ResolvedRoot = (Resolve-Path -LiteralPath $SourceRoot).Path.TrimEnd('\')
 $ScanErrors = @()
 
-$Files = Get-ChildItem -LiteralPath $ResolvedRoot -File -Recurse -Force `
-    -ErrorAction SilentlyContinue -ErrorVariable +ScanErrors
+$Files = @(
+    Get-ChildItem -LiteralPath $ResolvedRoot -File -Recurse -Force `
+        -ErrorAction SilentlyContinue -ErrorVariable +ScanErrors
+)
 
-$Inventory = foreach ($File in $Files) {
-    $RelativePath = $File.FullName.Substring($ResolvedRoot.Length).TrimStart('\')
+$Inventory = @(
+    foreach ($File in $Files) {
+        $RelativePath = $File.FullName.Substring($ResolvedRoot.Length).TrimStart('\')
 
-    [PSCustomObject]@{
-        SourceGroup      = $SourceGroup
-        RelativePath     = $RelativePath
-        FullPath         = $File.FullName
-        Folder           = $File.DirectoryName
-        FileName         = $File.Name
-        Extension        = $File.Extension.ToLowerInvariant()
-        SizeBytes        = $File.Length
-        SizeMB           = [Math]::Round($File.Length / 1MB, 2)
-        LastWriteTimeUtc = $File.LastWriteTimeUtc.ToString('o')
+        [PSCustomObject]@{
+            SourceGroup      = $SourceGroup
+            RelativePath     = $RelativePath
+            FullPath         = $File.FullName
+            Folder           = $File.DirectoryName
+            FileName         = $File.Name
+            Extension        = $File.Extension.ToLowerInvariant()
+            SizeBytes        = $File.Length
+            SizeMB           = [Math]::Round($File.Length / 1MB, 2)
+            LastWriteTimeUtc = $File.LastWriteTimeUtc.ToString('o')
+        }
     }
-}
+)
 
 $OutputDirectory = Split-Path -Parent $OutputCsv
 if ($OutputDirectory -and -not (Test-Path -LiteralPath $OutputDirectory)) {
