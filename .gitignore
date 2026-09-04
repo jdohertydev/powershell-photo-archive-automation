@@ -1,5 +1,6 @@
 # Generated working data
 output/
+examples/demo-workspace/
 *.log
 
 # Local/private source data
