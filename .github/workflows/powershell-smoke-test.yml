@@ -1,0 +1,44 @@
+name: PowerShell smoke test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-demo:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Run synthetic end-to-end demo
+        shell: powershell
+        run: .\examples\run-synthetic-demo.ps1
+
+      - name: Confirm verification output exists
+        shell: powershell
+        run: |
+          $Verification = '.\examples\demo-workspace\output\verification.csv'
+          if (-not (Test-Path -LiteralPath $Verification)) {
+            throw 'Verification output was not created.'
+          }
+
+          $Rows = @(Import-Csv -LiteralPath $Verification)
+          $Problems = @($Rows | Where-Object { $_.ExactMatch -ne 'True' })
+
+          if ($Rows.Count -eq 0) {
+            throw 'Verification output contained no rows.'
+          }
+
+          if ($Problems.Count -gt 0) {
+            throw "Synthetic verification found $($Problems.Count) problem(s)."
+          }
+
+          Write-Host "Verified $($Rows.Count) synthetic copied files successfully."
