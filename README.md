@@ -1,5 +1,7 @@
 # PowerShell Photo Archive Automation
 
+[![PowerShell smoke test](https://github.com/jdohertydev/powershell-photo-archive-automation/actions/workflows/powershell-smoke-test.yml/badge.svg)](https://github.com/jdohertydev/powershell-photo-archive-automation/actions/workflows/powershell-smoke-test.yml)
+
 AI-assisted PowerShell workflow for consolidating, organising and verifying a real multi-source household archive.
 
 The project began with a practical problem: cloud storage was approaching its limit, the Windows PC was also under storage pressure, and an SD card already contained years of photos and videos with almost no useful organisation. A storage subscription was due to become an ongoing cost, so the aim was to create one safe, chronological local archive that a non-technical user could browse and understand.
@@ -113,7 +115,7 @@ examples/
 - **`03-copy-archive.ps1`** — copies planned files without overwriting and records a transaction log. Supports `-WhatIf`.
 - **`04-verify-archive.ps1`** — recalculates SHA-256 hashes for each planned source/destination pair and reports any mismatch or missing file.
 
-## Synthetic demo
+## Synthetic demo and CI
 
 No real household data is required to inspect the workflow.
 
@@ -123,9 +125,11 @@ No real household data is required to inspect the workflow.
 powershell -ExecutionPolicy Bypass -File .\examples\run-synthetic-demo.ps1
 ```
 
+The same synthetic end-to-end flow runs automatically on a Windows GitHub Actions runner after each push or pull request. The workflow checks that verification output is created and that every synthetic copied file passes SHA-256 comparison.
+
 The generated workspace is ignored by Git. The example media files contain synthetic text data; they exist only to exercise the file-processing logic.
 
-Because the public scripts are later reconstructions rather than the original production files, they should be validated on disposable data before use with anything important. A test sequence is provided in [`docs/validation-checklist.md`](docs/validation-checklist.md).
+Because the public scripts are later reconstructions rather than the original production files, they should still be validated on disposable data before use with anything important. A test sequence is provided in [`docs/validation-checklist.md`](docs/validation-checklist.md).
 
 ## Privacy
 
