@@ -2,9 +2,14 @@
 
 The original archive project completed successfully, but the exact original `.ps1` files were not retained. The scripts in this repository are later reconstructions and should be validated on disposable synthetic data before anyone uses them on personal files.
 
+The original project began with a **manual OneDrive browser download and ZIP extraction**. The public reconstruction deliberately starts later, once all three source groups are already available locally.
+
 ## Recommended test sequence
 
-1. Create three temporary source folders representing OneDrive, PC and SD-card inputs.
+1. Create three temporary local source folders representing:
+   - an already downloaded/extracted OneDrive copy;
+   - PC files;
+   - legacy SD-card contents.
 2. Add only synthetic/disposable files.
 3. Include:
    - one exact duplicate with the same filename and size;
@@ -24,8 +29,20 @@ The original archive project completed successfully, but the exact original `.ps
 13. Deliberately alter one destination file and re-run verification; the script should report a problem and return a non-zero exit status.
 14. Deliberately remove one source/destination file and confirm the error is recorded.
 
+## Scope boundary
+
+The reconstructed scripts do **not**:
+
+- connect to OneDrive cloud;
+- download or extract the original OneDrive ZIP;
+- delete anything from OneDrive cloud;
+- cancel a storage subscription;
+- reproduce the later unimplemented Task Scheduler/continuous-ingestion idea.
+
+Those boundaries are intentional. The portfolio code demonstrates the local inventory, planning, duplicate-handling, copy and verification stages.
+
 ## Important
 
 These reconstructed scripts are portfolio/reference code, not a claim that the exact public version has been run against the original private archive.
 
-The original project result remains separately evidenced by preserved outputs: 3,288 files checked, 3,288 exact SHA-256 matches, and zero verification problems.
+The original project result remains separately evidenced by preserved outputs: 3,288 files copied and checked, 3,288 exact SHA-256 matches, and zero verification problems.
