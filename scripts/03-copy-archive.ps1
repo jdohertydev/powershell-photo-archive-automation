@@ -28,7 +28,7 @@ if (-not (Test-Path -LiteralPath $PlanCsv -PathType Leaf)) {
 }
 
 if (-not (Test-Path -LiteralPath $ArchiveRoot -PathType Container)) {
-    New-Item -ItemType Directory -Path $ArchiveRoot -Force | Out-Null
+    throw "Archive root does not exist. Create the destination directory deliberately before running this stage: $ArchiveRoot"
 }
 
 $Plan = @(Import-Csv -LiteralPath $PlanCsv | Where-Object { $_.Action -eq 'Copy' })
@@ -53,12 +53,12 @@ foreach ($Row in $Plan) {
             throw "Destination already exists; refusing to overwrite."
         }
 
-        $DestinationDirectory = Split-Path -Parent $Destination
-        if (-not (Test-Path -LiteralPath $DestinationDirectory)) {
-            New-Item -ItemType Directory -Path $DestinationDirectory -Force | Out-Null
-        }
-
         if ($PSCmdlet.ShouldProcess($Destination, "Copy from $($Row.SourcePath)")) {
+            $DestinationDirectory = Split-Path -Parent $Destination
+            if (-not (Test-Path -LiteralPath $DestinationDirectory)) {
+                New-Item -ItemType Directory -Path $DestinationDirectory -Force | Out-Null
+            }
+
             Copy-Item -LiteralPath $Row.SourcePath -Destination $Destination -ErrorAction Stop
 
             [void]$Results.Add([PSCustomObject]@{
